@@ -61,71 +61,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-
-                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
-
-            }
-            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-
-                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
-
-            }
-        }
-
-    }
-
-
-    /**
-     * Checks and if the application is not installed, then offers to download it from the Play Market
-     */
-    protected void sendToPrint(Intent intent) {
-        final String appPackageName = "ru.a402d.rawbtprinter";
-        PackageManager pm = getPackageManager();
-
-        // check app installed
-        PackageInfo pi = null;
-        if (pm != null) {
-            try {
-                pi = pm.getPackageInfo(appPackageName, 0);
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-        if (pi == null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            TextView title = new TextView(this);
-            title.setText(R.string.dialog_title);
-            title.setBackgroundColor(Color.DKGRAY);
-            title.setPadding(10, 10, 10, 10);
-            title.setGravity(Gravity.CENTER);
-            title.setTextColor(Color.WHITE);
-            title.setTextSize(14);
-            ImageView image = new ImageView(this);
-            image.setImageResource(R.drawable.baseline_print_black_48);
-            builder.setMessage(R.string.dialog_message)
-                    .setView(image).setCustomTitle(title);
-            builder.setPositiveButton(R.string.btn_install, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    try {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
-                    } catch (android.content.ActivityNotFoundException anfe) {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
-                    }
-                }
-            });
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        } else {
-            // send to print
-            intent.setPackage(appPackageName);
-            startActivity(intent);
-
-        }
     }
 
     /*  ==============================================================
@@ -140,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
         String url = "rawbt:" + textToPrint;
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        sendToPrint(intent);
+        startActivity(intent);
         button.setText("x");
     }
 
@@ -162,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         // call intent with rawbt:base64,
         String url = "rawbt:base64," + base64ToPrint;
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        sendToPrint(intent);
+        startActivity(intent);
         button.setText("x");
     }
 
@@ -183,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TEXT, textToPrint);
-        sendToPrint(intent);
+        startActivity(intent);
 
         button.setText("x");
     }
@@ -200,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TEXT, (CharSequence) sb);
-        sendToPrint(intent);
+        startActivity(intent);
 
         button.setText("x");
     }
@@ -262,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         intent.setType("text/plain");
-        sendToPrint(intent);
+        startActivity(intent);
         button.setText("x");
     }
 
@@ -284,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(uri, "text/plain");
-        sendToPrint(intent);
+        startActivity(intent);
         button.setText("x");
     }
 
@@ -324,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         intent.setType("text/plain");
-        sendToPrint(intent);
+        startActivity(intent);
 
         button.setText("x");
     }
@@ -353,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
          */
         intent.setDataAndType(uri, "text/plain"); // CORRECT set together !!!
 
-        sendToPrint(intent);
+        startActivity(intent);
 
         button.setText("x");
     }
@@ -397,7 +332,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         intent.setType("text/plain");
-        sendToPrint(intent);
+        startActivity(intent);
 
         button.setText("x");
     }
@@ -420,7 +355,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(uri, "text/plain"); // CORRECT set together !!!
-        sendToPrint(intent);
+        startActivity(intent);
 
         button.setText("x");
     }
@@ -437,7 +372,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         intent.setType("image/png");
-        sendToPrint(intent);
+        startActivity(intent);
 
         button.setText("x");
     }
@@ -449,7 +384,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d("TEST", uri.toString());
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(uri, "image/png"); // CORRECT set together !!!
-        sendToPrint(intent);
+        startActivity(intent);
 
         button.setText("x");
     }
@@ -469,7 +404,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(uri, "text/plain"); // CORRECT set together !!!
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-        sendToPrint(intent);
+        startActivity(intent);
 
         button.setText("x");
     }
